@@ -1,0 +1,46 @@
+<div class="game" *ngIf="gameState$ | async as gameState">
+  <h1>Tic Tac Toe</h1>
+
+  <ng-container *ngIf="gameState === GameState.Started">
+    <h3>Player {{ player$ | async}}</h3>
+    <div class="board" *ngIf="board$ | async as board">
+
+      <ng-container *ngFor="let boardLine of board$ | async; let row=index">
+        <ng-container *ngFor="let boardSquare of boardLine; let col=index">
+
+          <div class="square" *ngIf="player$ | async as player"
+            [style.background-color]="player===1 ? 'bisque' : 'antiquewhite'" (click)="play(row, col)">
+            {{ board[row][col] == SquareState.Player1
+            ? "X"
+            : board[row][col] == SquareState.Player2
+            ? "O"
+            : ""}}
+          </div>
+        </ng-container>
+      </ng-container>
+
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="gameState === GameState.NotStarted">
+    <div class="start-game">
+      <button type="button" (click)="startGame()">
+        Start game
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="gameState === GameState.Draw">
+    <h2>It's a DRAW!</h2>
+  </ng-container>
+
+  <ng-container *ngIf="gameState === GameState.Victory">
+    <h2>Player {{player$ | async}} WON!</h2>
+  </ng-container>
+
+  <ng-container *ngIf="gameState !== GameState.NotStarted">
+    <button type="button" (click)="resetGame()">
+      Reset
+    </button>
+  </ng-container>
+</div>
